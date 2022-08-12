@@ -33,13 +33,17 @@ export class Rule {
 
     public static PutFlag(field: Field, index: number): Field {
         const returnField = Rule.Copy(field);
-        returnField.Flags[index] = true;
+        if (!returnField.Opens[index]) {
+            returnField.Flags[index] = true;
+        }
         return returnField;
     }
 
     public static RemoveFlag(field: Field, index: number): Field {
         const returnField = Rule.Copy(field);
-        returnField.Flags[index] = false;
+        if (!returnField.Opens[index]) {
+            returnField.Flags[index] = false;
+        }
         return returnField;
     }
 
@@ -84,6 +88,7 @@ export class Rule {
             const i = queue.pop();
             if (i) {
                 returnField.Opens[i] = true;
+                returnField.Flags[i] = false;
                 if (returnField.Counts[i] === 0) {
                     Rule.getOpenableAdjacentIndex(returnField, i).forEach((j) => {
                         queue.push(j);
