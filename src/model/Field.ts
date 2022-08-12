@@ -17,32 +17,22 @@ export class Field {
     // マスを開ける
     public Open(index: number): Field {
         let returnField = this.Copy();
-        if (returnField._Cells[index].Bomb) {
-            returnField._Cells.forEach((state, i) => {
-                if (state.Bomb) {
-                    returnField._Cells[i].Open = true
+        returnField = this.fillOpen(index);
+        if (returnField.IsGameOver()) {
+            returnField._Cells.forEach((cell, i) => {
+                if (cell.Bomb) {
+                    returnField._Cells[i].Open = true;
                 }
             })
-            return returnField
-        }
-        returnField = this.fillOpen(index);
-        return returnField;
-    }
-
-    // 旗を立てる
-    public PutFlag(index: number): Field {
-        const returnField = this.Copy();
-        if (!returnField._Cells[index].Open) {
-            returnField._Cells[index].Flag = true
         }
         return returnField;
     }
 
-    // 旗を消す
-    public RemoveFlag(index: number): Field {
+    // 旗を立てる/消す
+    public ToggleFlag(index: number): Field {
         const returnField = this.Copy();
         if (!returnField._Cells[index].Open) {
-            returnField._Cells[index].Flag = false
+            returnField._Cells[index].Flag = !returnField._Cells[index].Flag
         }
         return returnField;
     }
@@ -75,10 +65,9 @@ export class Field {
     // ランダムなマップを取得
     public static GetRandomField(size: number, bomb: number): Field {
         const len = size * size;
-        const opens = Array(len).map(() => false);
-        const flags = Array(len).map(() => false);
-        const bombs = Array(len).map(() => false);
-        const counts = Array(len).map(() => 0);
+        const opens = Array(len).fill(false);
+        const flags = Array(len).fill(false);
+        const bombs = Array(len).fill(false);
         for (let i = 0; i < bomb; i++) {
             bombs[i] = true;
         }
@@ -88,33 +77,53 @@ export class Field {
             bombs[i] = bombs[r]
             bombs[r] = tmp
         }
-        return new Field(Array(len).map((i) => {
+        return new Field(Array(len).fill(null).map((_, i) => {
             return {
                 Open: opens[i],
                 Flag: flags[i],
                 Bomb: bombs[i],
-                Count: counts[i]
+                Count: Field.getBombCount(i, bombs, size)
             }
         }));
     }
 
-    private xyToIndex(x: number, y: number): number {
-        const size = this.Size();
+    private static getBombCount(index: number, bombs: number[], size: number): number {
+        const [x, y] = Field.indexToXy(index, size);
+        let count = 0;
+        [
+            Field.xyToIndexOrNaN(x - 1, y + 0, size),
+            Field.xyToIndexOrNaN(x + 1, y + 0, size),
+            Field.xyToIndexOrNaN(x + 0, y - 1, size),
+            Field.xyToIndexOrNaN(x + 0, y + 1, size),
+            Field.xyToIndexOrNaN(x + 1, y + 1, size),
+            Field.xyToIndexOrNaN(x - 1, y - 1, size),
+            Field.xyToIndexOrNaN(x + 1, y - 1, size),
+            Field.xyToIndexOrNaN(x - 1, y + 1, size),
+        ].filter((i) => {
+            return !isNaN(i);
+        }).forEach((i) => {
+            if (bombs[i]) {
+                count++;
+            }
+        })
+
+        return count;
+    }
+
+    private static xyToIndex(x: number, y: number, size: number): number {
         if (x < 0 || x >= size || y < 0 || y >= size) {
             throw 'Fail to convert xy to index';
         }
         return x + y * size;
     }
 
-    private xyToIndexOrNaN(x: number, y: number): number {
-        const size = this.Size();
+    private static xyToIndexOrNaN(x: number, y: number, size: number): number {
         if (x < 0 || x >= size || y < 0 || y >= size) {
             return NaN;
         }
-        return this.xyToIndex(x, y);
+        return Field.xyToIndex(x, y, size);
     }
-    private indexToXy(index: number): [number, number] {
-        const size = this.Size();
+    private static indexToXy(index: number, size: number): [number, number] {
         return [index % size, Math.floor(index / size)];
     }
 
@@ -122,13 +131,15 @@ export class Field {
         const returnField = this.Copy();
         const queue: number[] = [];
         queue.push(index)
+        returnField._Cells[index].Open = true;
+        returnField._Cells[index].Flag = false;
         while (queue.length > 0) {
             const i = queue.pop();
-            if (i) {
-                returnField._Cells[i].Open = true;
-                returnField._Cells[i].Flag = false;
+            if (i !== undefined) {
                 if (returnField._Cells[i].Count === 0) {
-                    this.getOpenableAdjacentIndex(i).forEach((j) => {
+                    Field.getOpenableAdjacentIndex(returnField, i).forEach((j) => {
+                        returnField._Cells[j].Open = true;
+                        returnField._Cells[j].Flag = false;
                         queue.push(j);
                     })
                 }
@@ -137,19 +148,19 @@ export class Field {
         return returnField
     }
 
-    private getOpenableAdjacentIndex(index: number): number[] {
-        const [x, y] = this.indexToXy(index);
+    private static getOpenableAdjacentIndex(field: Field, index: number): number[] {
+        const [x, y] = Field.indexToXy(index, field.Size());
         return [
-            this.xyToIndexOrNaN(x - 1, y + 0),
-            this.xyToIndexOrNaN(x + 1, y + 0),
-            this.xyToIndexOrNaN(x + 0, y - 1),
-            this.xyToIndexOrNaN(x + 0, y + 1),
+            Field.xyToIndexOrNaN(x - 1, y + 0, field.Size()),
+            Field.xyToIndexOrNaN(x + 1, y + 0, field.Size()),
+            Field.xyToIndexOrNaN(x + 0, y - 1, field.Size()),
+            Field.xyToIndexOrNaN(x + 0, y + 1, field.Size()),
         ].filter((i) => {
             return !isNaN(i);
         }).filter((i) => {
-            return !this._Cells[i].Bomb &&
-                !this._Cells[i].Flag &&
-                !this._Cells[i].Open;
+            return !field._Cells[i].Bomb &&
+                !field._Cells[i].Flag &&
+                !field._Cells[i].Open;
         });
     }
 }
