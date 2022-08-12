@@ -8,10 +8,12 @@ export class Field {
         this._Cells = Cells.map(cell => { return { ...cell } })
     }
 
+    // 盤面をコピーする
     public Copy(): Field {
         return new Field(this._Cells)
     }
 
+    // マスを開ける
     public Open(index: number): Field {
         let returnField = this.Copy();
         if (returnField._Cells[index].Bomb) {
@@ -26,6 +28,7 @@ export class Field {
         return returnField;
     }
 
+    // 旗を立てる
     public PutFlag(index: number): Field {
         const returnField = this.Copy();
         if (!returnField._Cells[index].Open) {
@@ -34,6 +37,7 @@ export class Field {
         return returnField;
     }
 
+    // 旗を消す
     public RemoveFlag(index: number): Field {
         const returnField = this.Copy();
         if (!returnField._Cells[index].Open) {
@@ -42,6 +46,7 @@ export class Field {
         return returnField;
     }
 
+    // 駆除成功したか
     public IsComplete(): boolean {
         for (const state of this._Cells) {
             if (!state.Bomb && !state.Open) {
@@ -51,6 +56,7 @@ export class Field {
         return true
     }
 
+    // 爆死したか
     public IsGameOver(): boolean {
         for (const state of this._Cells) {
             if (state.Bomb && state.Open) {
@@ -60,8 +66,35 @@ export class Field {
         return false
     }
 
+    // 縦横の幅
     public Size(): number {
         return Math.sqrt(this._Cells.length);
+    }
+
+    // ランダムなマップを取得
+    public static GetRandomField(size: number, bomb: number): Field {
+        const len = size * size;
+        const opens = Array(len).map(() => false);
+        const flags = Array(len).map(() => false);
+        const bombs = Array(len).map(() => false);
+        const counts = Array(len).map(() => 0);
+        for (let i = 0; i < bomb; i++) {
+            bombs[i] = true;
+        }
+        for (let i = len - 1; i >= 0; i--) {
+            const r = Math.floor(Math.random() * (i + 1))
+            const tmp = bombs[i]
+            bombs[i] = bombs[r]
+            bombs[r] = tmp
+        }
+        return new Field(Array(len).map((i) => {
+            return {
+                Open: opens[i],
+                Flag: flags[i],
+                Bomb: bombs[i],
+                Count: counts[i]
+            }
+        }));
     }
 
     private xyToIndex(x: number, y: number): number {
