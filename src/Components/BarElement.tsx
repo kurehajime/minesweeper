@@ -1,13 +1,14 @@
 import { Field } from "../model/Field"
-import Params from "../params"
 import "./BarElement.css"
 
 type Props = {
     field: Field
     clickReset: () => void
+    toggleAssistant: () => void
+    cellSize: number
 }
 export default function BarElement(props: Props) {
-    const cellSize = Params.cellSize
+    const cellSize = props.cellSize
     const face = () => {
         if (props.field.IsComplete()) {
             return "😎"
@@ -20,7 +21,7 @@ export default function BarElement(props: Props) {
 
     return (
         <div>
-            <div className="title_bar" ><div className="title"> Minesweeper </div><div className="button help center">?</div></div>
+            <div className="title_bar" ><div className="title"> Minesweeper </div><div className="button help center" onClick={() => props.toggleAssistant()}>?</div></div>
             <div
                 style={
                     {

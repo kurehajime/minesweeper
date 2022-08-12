@@ -10,5 +10,6 @@ export default defineConfig({
     build: {
         outDir: './docs'
     },
+    assetsInclude: ['**/*.png'],
     plugins: [react(), viteSingleFile()]
 })

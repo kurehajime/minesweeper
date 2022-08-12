@@ -1,15 +1,15 @@
 import { BUTTON_TYPE } from "../model/ButtonType"
 import { Field } from "../model/Field"
-import Params from "../params"
 import CellElement from "./CellElement"
 import "./FieldElement.css"
 
 type Props = {
     field: Field
     clicked: (index: number, button_type: BUTTON_TYPE) => void
+    cellSize: number
 }
 export default function FieldElement(props: Props) {
-    const cellSize = Params.cellSize
+    const cellSize = props.cellSize
     const FieldSize = props.field.Size() * cellSize
     const mouseClick = (e: React.PointerEvent<SVGSVGElement>) => {
         const x = e.nativeEvent.offsetX
@@ -40,6 +40,7 @@ export default function FieldElement(props: Props) {
                 cell={cell}
                 x={x}
                 y={y}
+                cellSize={cellSize}
             />
         })
         }
