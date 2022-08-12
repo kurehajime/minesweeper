@@ -11,12 +11,7 @@ export class Cell {
         this.Count = Count
     }
 
-    public static Copy(state: Cell): Cell {
-        return {
-            Open: state.Open,
-            Flag: state.Flag,
-            Bomb: state.Bomb,
-            Count: state.Count,
-        }
+    public Copy(): Cell {
+        return new Cell(this.Open, this.Flag, this.Bomb, this.Count)
     }
 }
