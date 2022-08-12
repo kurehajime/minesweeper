@@ -6,11 +6,24 @@
     border-width: 5px;
 }
 
-.title {
+.title_bar {
     border-style: ridge;
     border-width: 5px;
     background-color: blue;
+    display: flex;
+}
+
+.title {
+    width: calc(100% / 2);
     color: white;
+    font-weight: bolder;
+    padding-top: 5px;
+}
+
+.help {
+    color: black;
+    margin-left: auto;
+    font-weight: bolder;
 }
 
 .item {
@@ -38,6 +51,7 @@
     appearance: none;
     border-style: solid;
     border-width: 3px;
+    background-color: lightgray;
     border-top-color: whitesmoke;
     border-left-color: whitesmoke;
     border-bottom-color: gray;

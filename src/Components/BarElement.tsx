@@ -20,7 +20,7 @@ export default function BarElement(props: Props) {
 
     return (
         <div>
-            <div className="title" ><b> Minesweeper </b></div>
+            <div className="title_bar" ><div className="title"> Minesweeper </div><div className="button help center">?</div></div>
             <div
                 style={
                     {
