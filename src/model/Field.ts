@@ -9,7 +9,6 @@ export class Field {
     }
 
     public Copy(): Field {
-        let a = this.Cells
         return new Field(this._Cells)
     }
 
