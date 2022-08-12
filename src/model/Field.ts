@@ -2,10 +2,10 @@ import { Cell } from "./State"
 
 export class Field {
     private _Cells: Cell[]
-    get Cells() { return Object.freeze(this._Cells) }
+    get Cells() { return Object.freeze(this._Cells.map(cell => Object.freeze(cell))) }
 
     constructor(Cells: Cell[]) {
-        this._Cells = Cells.map(x => x.Copy())
+        this._Cells = Cells.map(cell => { return { ...cell } })
     }
 
     public Copy(): Field {
@@ -17,7 +17,7 @@ export class Field {
         if (returnField._Cells[index].Bomb) {
             returnField._Cells.forEach((state, i) => {
                 if (state.Bomb) {
-                    returnField._Cells[i] = state.OpenedCopy(true);
+                    returnField._Cells[i].Open = true
                 }
             })
             return returnField
@@ -29,7 +29,7 @@ export class Field {
     public PutFlag(index: number): Field {
         const returnField = this.Copy();
         if (!returnField._Cells[index].Open) {
-            returnField._Cells[index] = returnField._Cells[index].FlagedCopy(true);
+            returnField._Cells[index].Flag = true
         }
         return returnField;
     }
@@ -37,7 +37,7 @@ export class Field {
     public RemoveFlag(index: number): Field {
         const returnField = this.Copy();
         if (!returnField._Cells[index].Open) {
-            returnField._Cells[index] = returnField._Cells[index].FlagedCopy(false);
+            returnField._Cells[index].Flag = false
         }
         return returnField;
     }
@@ -60,12 +60,12 @@ export class Field {
         return false
     }
 
-    private getSize(): number {
+    public Size(): number {
         return Math.sqrt(this._Cells.length);
     }
 
     private xyToIndex(x: number, y: number): number {
-        const size = this.getSize();
+        const size = this.Size();
         if (x < 0 || x >= size || y < 0 || y >= size) {
             throw 'Fail to convert xy to index';
         }
@@ -73,14 +73,14 @@ export class Field {
     }
 
     private xyToIndexOrNaN(x: number, y: number): number {
-        const size = this.getSize();
+        const size = this.Size();
         if (x < 0 || x >= size || y < 0 || y >= size) {
             return NaN;
         }
         return this.xyToIndex(x, y);
     }
     private indexToXy(index: number): [number, number] {
-        const size = this.getSize();
+        const size = this.Size();
         return [index % size, Math.floor(index / size)];
     }
 
@@ -91,8 +91,8 @@ export class Field {
         while (queue.length > 0) {
             const i = queue.pop();
             if (i) {
-                returnField._Cells[i] = returnField._Cells[i].OpenedCopy(true);
-                returnField._Cells[i] = returnField._Cells[i].FlagedCopy(true);
+                returnField._Cells[i].Open = true;
+                returnField._Cells[i].Flag = false;
                 if (returnField._Cells[i].Count === 0) {
                     this.getOpenableAdjacentIndex(i).forEach((j) => {
                         queue.push(j);
