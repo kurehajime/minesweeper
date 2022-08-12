@@ -2,13 +2,14 @@ import { Cell } from "./State"
 
 export class Field {
     private _Cells: Cell[]
-    get Cells() { return this._Cells }
+    get Cells() { return Object.freeze(this._Cells) }
 
     constructor(Cells: Cell[]) {
         this._Cells = Cells.map(x => x.Copy())
     }
 
     public Copy(): Field {
+        let a = this.Cells
         return new Field(this._Cells)
     }
 
