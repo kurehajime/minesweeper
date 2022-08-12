@@ -31,3 +31,18 @@ li {
     cursor: pointer;
     color: blue;
 }
+
+.zoomIn {
+    animation: zoomIn 1.0s ease 0s 1 normal;
+}
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        transform: scale3d(0.3, .3, 0.3)
+    }
+
+    50% {
+        opacity: 1
+    }
+}

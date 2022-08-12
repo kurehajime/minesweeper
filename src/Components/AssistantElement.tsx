@@ -8,12 +8,13 @@ type Props = {
 export default function AssistantElement(props: Props) {
     return (
         props.show ?
-            <div className='assistant' >
+            <div className='assistant zoomIn' >
                 <div className="balloon"><p>
                     <p><b>何かお困りですか？</b></p>
                     <ul>
                         <li onClick={() => props.setLevel(1)}>標準難易度で遊びたい</li>
                         <li onClick={() => props.setLevel(2)}>高難易度で遊びたい</li>
+                        <li onClick={() => props.setLevel(3)}>超難易度で遊びたい</li>
                         <li onClick={() => props.setLevel(99)}>お前を消す方法</li>
                     </ul>
                 </p></div>

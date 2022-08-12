@@ -18,6 +18,9 @@ export default function GameElement() {
             case 2:
                 setField(Field.GetRandomField(20, 50))
                 break;
+            case 3:
+                setField(Field.GetRandomField(20, 80))
+                break;
             case 99:
                 setField(Field.GetRandomField(20, 399))
                 break;
