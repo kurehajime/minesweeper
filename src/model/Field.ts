@@ -2,7 +2,8 @@ import { Cell } from "./State"
 
 export class Field {
     private _Cells: Cell[]
-    get Cells() { return Object.freeze(this._Cells.map(cell => Object.freeze(cell))) }
+    // セルの一覧
+    public get Cells(): Readonly<Cell[]> { return Object.freeze(this._Cells.map(cell => Object.freeze(cell))) }
 
     constructor(Cells: Cell[]) {
         this._Cells = Cells.map(cell => { return { ...cell } })
