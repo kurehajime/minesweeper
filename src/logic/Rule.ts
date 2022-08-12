@@ -1,13 +1,19 @@
 import { Field } from "../model/Field";
+import { Cell } from "../model/State";
 
 export class Rule {
+    public static CopyState(state: Cell): Cell {
+        return {
+            Open: state.Open,
+            Flag: state.Flag,
+            Bomb: state.Bomb,
+            Count: state.Count,
+        }
+    }
 
     public static Copy(field: Field): Field {
         return {
-            Opens: [...field.Opens],
-            Flags: [...field.Flags],
-            Boms: [...field.Boms],
-            Counts: [...field.Counts],
+            Cells: field.Cells.map(x => Rule.CopyState(x)),
             isGameOver: field.isGameOver,
             isComplete: field.isComplete,
         }
@@ -15,11 +21,11 @@ export class Rule {
 
     public static Open(field: Field, index: number): Field {
         let returnField = Rule.Copy(field);
-        if (returnField.Boms[index]) {
+        if (returnField.Cells[index].Bomb) {
             returnField.isGameOver = true;
-            returnField.Boms.forEach((isBomb, i) => {
-                if (isBomb) {
-                    returnField.Opens[i] = true;
+            returnField.Cells.forEach((state, i) => {
+                if (state.Bomb) {
+                    returnField.Cells[i].Open = true;
                 }
             })
             return returnField
@@ -33,23 +39,23 @@ export class Rule {
 
     public static PutFlag(field: Field, index: number): Field {
         const returnField = Rule.Copy(field);
-        if (!returnField.Opens[index]) {
-            returnField.Flags[index] = true;
+        if (!returnField.Cells[index].Open) {
+            returnField.Cells[index].Flag = true;
         }
         return returnField;
     }
 
     public static RemoveFlag(field: Field, index: number): Field {
         const returnField = Rule.Copy(field);
-        if (!returnField.Opens[index]) {
-            returnField.Flags[index] = false;
+        if (!returnField.Cells[index].Open) {
+            returnField.Cells[index].Flag = true;
         }
         return returnField;
     }
 
     private static isComplete(field: Field): boolean {
-        for (let i = 0; i < field.Boms.length; i++) {
-            if (!field.Boms[i] && !field.Opens[i]) {
+        for (const state of field.Cells) {
+            if (!state.Bomb && !state.Open) {
                 return false;
             }
         }
@@ -57,7 +63,7 @@ export class Rule {
     }
 
     private static getSize(field: Field): number {
-        return Math.sqrt(field.Opens.length);
+        return Math.sqrt(field.Cells.length);
     }
 
     private static xyToIndex(field: Field, x: number, y: number): number {
@@ -87,9 +93,9 @@ export class Rule {
         while (queue.length > 0) {
             const i = queue.pop();
             if (i) {
-                returnField.Opens[i] = true;
-                returnField.Flags[i] = false;
-                if (returnField.Counts[i] === 0) {
+                returnField.Cells[i].Open = true;
+                returnField.Cells[i].Flag = false;
+                if (returnField.Cells[i].Count === 0) {
                     Rule.getOpenableAdjacentIndex(returnField, i).forEach((j) => {
                         queue.push(j);
                     })
@@ -109,9 +115,9 @@ export class Rule {
         ].filter((i) => {
             return !isNaN(i);
         }).filter((i) => {
-            return !field.Boms[i] &&
-                !field.Flags[i] &&
-                !field.Opens[i];
+            return !field.Cells[i].Bomb &&
+                !field.Cells[i].Flag &&
+                !field.Cells[i].Open;
         });
     }
 }

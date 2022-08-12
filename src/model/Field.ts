@@ -1,8 +1,7 @@
+import { Cell } from "./State"
+
 export type Field = {
-    Opens: boolean[]
-    Flags: boolean[]
-    Boms: boolean[]
-    Counts: number[]
+    Cells: Cell[]
     isGameOver: boolean
     isComplete: boolean
 }
