@@ -1,0 +1,45 @@
+.bar {
+    background-color: lightgray;
+    width: 100%;
+    display: flex;
+    border-style: ridge;
+    border-width: 5px;
+}
+
+.title {
+    border-style: ridge;
+    border-width: 5px;
+    background-color: blue;
+    color: white;
+}
+
+.item {
+    width: calc(100% / 3);
+    text-align: center;
+    list-style: none;
+    border-style: ridge;
+    border-width: 2px;
+}
+
+.num {
+    background-color: rgb(50, 30, 30);
+    color: red;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    appearance: none;
+    border-style: solid;
+    border-width: 3px;
+    border-top-color: whitesmoke;
+    border-left-color: whitesmoke;
+    border-bottom-color: gray;
+    border-right-color: gray;
+    width: 30px;
+}

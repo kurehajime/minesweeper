@@ -1,12 +1,14 @@
 import { Cell } from "../model/State"
+import Params from "../params"
+import "./CellElement.css"
 
 type Props = {
     cell: Cell
-    cellSize: number
     x: number
     y: number
 }
 export default function CellElement(props: Props) {
+    const cellSize = Params.cellSize
     const mark = (): string => {
         if (props.cell.Flag) {
             return '🚩'
@@ -25,9 +27,9 @@ export default function CellElement(props: Props) {
     }
     return (
         <g>
-            <rect x={props.x} y={props.y} width={props.cellSize} height={props.cellSize} stroke="black" fill={props.cell.Open ? "white" : "lightgray"} />
-            <text
-                x={props.x + props.cellSize / 2} y={props.y + props.cellSize / 2}
+            <rect x={props.x} y={props.y} width={cellSize} height={cellSize} stroke="black" fill={props.cell.Open ? "white" : "lightgray"} />
+            <text 
+                x={props.x + cellSize / 2} y={props.y + cellSize / 2}
                 textAnchor="middle" dominantBaseline="central" stroke="black">{
                     mark()
                 }</text>

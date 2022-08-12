@@ -22,6 +22,7 @@ export class Field {
             returnField._Cells.forEach((cell, i) => {
                 if (cell.Bomb) {
                     returnField._Cells[i].Open = true;
+                    returnField._Cells[i].Flag = false;
                 }
             })
         }
@@ -60,6 +61,16 @@ export class Field {
     // 縦横の幅
     public Size(): number {
         return Math.sqrt(this._Cells.length);
+    }
+
+    // 開いた数
+    public OpenCount(): number {
+        return this._Cells.filter(cell => cell.Open).length
+    }
+
+    // 爆弾の数
+    public BombCount(): number {
+        return this._Cells.filter(cell => cell.Bomb).length
     }
 
     // ランダムなマップを取得
