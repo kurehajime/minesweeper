@@ -1,22 +1,23 @@
 import { Cell } from "./State"
 
 export class Field {
-    public Cells: Cell[]
+    private _Cells: Cell[]
+    get Cells() { return this._Cells }
 
     constructor(Cells: Cell[]) {
-        this.Cells = Cells.map(x => x.Copy())
+        this._Cells = Cells.map(x => x.Copy())
     }
 
     public Copy(): Field {
-        return new Field(this.Cells)
+        return new Field(this._Cells)
     }
 
     public Open(index: number): Field {
         let returnField = this.Copy();
-        if (returnField.Cells[index].Bomb) {
-            returnField.Cells.forEach((state, i) => {
+        if (returnField._Cells[index].Bomb) {
+            returnField._Cells.forEach((state, i) => {
                 if (state.Bomb) {
-                    returnField.Cells[i].Open = true;
+                    returnField._Cells[i] = state.OpenedCopy(true);
                 }
             })
             return returnField
@@ -27,22 +28,22 @@ export class Field {
 
     public PutFlag(index: number): Field {
         const returnField = this.Copy();
-        if (!returnField.Cells[index].Open) {
-            returnField.Cells[index].Flag = true;
+        if (!returnField._Cells[index].Open) {
+            returnField._Cells[index] = returnField._Cells[index].FlagedCopy(true);
         }
         return returnField;
     }
 
     public RemoveFlag(index: number): Field {
         const returnField = this.Copy();
-        if (!returnField.Cells[index].Open) {
-            returnField.Cells[index].Flag = true;
+        if (!returnField._Cells[index].Open) {
+            returnField._Cells[index] = returnField._Cells[index].FlagedCopy(false);
         }
         return returnField;
     }
 
     public IsComplete(): boolean {
-        for (const state of this.Cells) {
+        for (const state of this._Cells) {
             if (!state.Bomb && !state.Open) {
                 return false;
             }
@@ -51,7 +52,7 @@ export class Field {
     }
 
     public IsGameOver(): boolean {
-        for (const state of this.Cells) {
+        for (const state of this._Cells) {
             if (state.Bomb && state.Open) {
                 return true;
             }
@@ -60,7 +61,7 @@ export class Field {
     }
 
     private getSize(): number {
-        return Math.sqrt(this.Cells.length);
+        return Math.sqrt(this._Cells.length);
     }
 
     private xyToIndex(x: number, y: number): number {
@@ -90,9 +91,9 @@ export class Field {
         while (queue.length > 0) {
             const i = queue.pop();
             if (i) {
-                returnField.Cells[i].Open = true;
-                returnField.Cells[i].Flag = false;
-                if (returnField.Cells[i].Count === 0) {
+                returnField._Cells[i] = returnField._Cells[i].OpenedCopy(true);
+                returnField._Cells[i] = returnField._Cells[i].FlagedCopy(true);
+                if (returnField._Cells[i].Count === 0) {
                     this.getOpenableAdjacentIndex(i).forEach((j) => {
                         queue.push(j);
                     })
@@ -112,9 +113,9 @@ export class Field {
         ].filter((i) => {
             return !isNaN(i);
         }).filter((i) => {
-            return !this.Cells[i].Bomb &&
-                !this.Cells[i].Flag &&
-                !this.Cells[i].Open;
+            return !this._Cells[i].Bomb &&
+                !this._Cells[i].Flag &&
+                !this._Cells[i].Open;
         });
     }
 }
