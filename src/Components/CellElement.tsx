@@ -27,7 +27,7 @@ export default function CellElement(props: Props) {
     }
     return (
         <g>
-            <rect x={props.x} y={props.y} width={cellSize} height={cellSize} stroke="black" fill={props.cell.Open ? "white" : "lightgray"} />
+            <rect x={props.x} y={props.y} width={cellSize} height={cellSize} stroke="black" fill={props.cell.Open ? "whitesmoke" : "lightgray"} />
             <text 
                 x={props.x + cellSize / 2} y={props.y + cellSize / 2}
                 textAnchor="middle" dominantBaseline="central" stroke="black">{
