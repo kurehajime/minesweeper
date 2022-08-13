@@ -9,11 +9,12 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "typescript": "^4.7.4",
+        "use-sound": "^4.0.1",
         "use-timer": "^2.0.1"
     },
     "scripts": {
         "start": "vite",
-        "build": "node ./update-date.js && tsc --noEmit && vite build",
+        "build": "tsc --noEmit && vite build",
         "serve": "vite preview",
         "test": "vitest run",
         "uplib": "npx npm-check-updates -u && npm i"

@@ -6,12 +6,17 @@ import BarElement from "./BarElement"
 import FieldElement from "./FieldElement"
 import { useTimer } from 'use-timer'
 import CreditElement from "./CreditElement"
+import useSound from 'use-sound';
+import boopSfx from '../assets/Tada-sound.mp3';
 
 export default function GameElement() {
     const [field, setField] = useState<Field>(Field.GetRandomField(10, 10))
     const [showAssistant, setShowAssistant] = useState<boolean>(false)
     const [level, setLevel] = useState<number>(1)
     const { time: scoreTime, start: startScore, pause: pauseScore, reset: resetScore } = useTimer({ endTime: 999 })
+    const [play] = useSound(boopSfx, {
+        playbackRate: 1.5
+    });
 
     const cellSize = level === 1 ? 50 : 25;
     const newGame = (level: number) => {
@@ -52,6 +57,9 @@ export default function GameElement() {
                             setField(newField)
                             if (newField.IsGameOver() || newField.IsComplete()) {
                                 pauseScore()
+                                if (newField.IsComplete()) {
+                                    play()
+                                }
                             }
                         } else {
                             setField(field.ToggleFlag(index))
