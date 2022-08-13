@@ -6,6 +6,7 @@ type Props = {
     clickReset: () => void
     toggleAssistant: () => void
     cellSize: number
+    time: number
 }
 export default function BarElement(props: Props) {
     const cellSize = props.cellSize
@@ -32,7 +33,7 @@ export default function BarElement(props: Props) {
             >
                 <div className='item num' ><b>{props.field.BombCount()}</b></div>
                 <div className='item center' ><div className="button" onClick={() => { props.clickReset() }}>{face()}</div></div>
-                <div className='item num' ><b>0</b></div>
+                <div className='item num' ><b>{props.time}</b></div>
             </div >
         </div>
 

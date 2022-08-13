@@ -4,13 +4,17 @@ import { Field } from "../model/Field"
 import AssistantElement from "./AssistantElement"
 import BarElement from "./BarElement"
 import FieldElement from "./FieldElement"
+import { useTimer } from 'use-timer'
 
 export default function GameElement() {
     const [field, setField] = useState<Field>(Field.GetRandomField(10, 10))
     const [showAssistant, setShowAssistant] = useState<boolean>(false)
     const [level, setLevel] = useState<number>(1)
+    const { time: scoreTime, start: startScore, pause: pauseScore, reset: resetScore } = useTimer({ endTime: 999 })
+
     const cellSize = level === 1 ? 50 : 25;
     const newGame = (level: number) => {
+        resetScore()
         switch (level) {
             case 1:
                 setField(Field.GetRandomField(10, 10))
@@ -26,6 +30,7 @@ export default function GameElement() {
                 break;
         }
     }
+
     return (<>
         <div>
             <BarElement
@@ -33,12 +38,20 @@ export default function GameElement() {
                 clickReset={() => { newGame(level) }}
                 toggleAssistant={() => { setShowAssistant(!showAssistant) }}
                 cellSize={cellSize}
+                time={scoreTime}
             />
             <FieldElement
                 field={field} clicked={function (index: number, button_type: BUTTON_TYPE): void {
                     if (!field.IsGameOver() && !field.IsComplete()) {
                         if (button_type === 'open') {
-                            setField(field.Open(index))
+                            if (field.OpenCount() === 0) {
+                                startScore()
+                            }
+                            const newField = field.Open(index)
+                            setField(newField)
+                            if (newField.IsGameOver() || newField.IsComplete()) {
+                                pauseScore()
+                            }
                         } else {
                             setField(field.ToggleFlag(index))
                         }
