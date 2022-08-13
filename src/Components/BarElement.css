@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'DSEG7Classic-Bold';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('DSEG7Classic-Bold'),
+        url('../assets/DSEG7Classic-Bold.woff2') format('woff2');
+}
+
 .bar {
     background-color: lightgray;
     width: 100%;
@@ -40,6 +49,8 @@
     text-align: right;
     padding-right: 5px;
     padding-top: 5px;
+    font-family: 'DSEG7Classic-Bold', sans-serif;
+    font-size: 18px;
 }
 
 .center {

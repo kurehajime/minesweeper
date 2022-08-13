@@ -1,0 +1,16 @@
+.credit {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+    color: white;
+    margin: 15px;
+    font-size: 12px;
+    font-style: italic;
+    font-family: 'MS UI Gothic', 'MS Gothic', 'MS PGothic', sans-serif;
+    line-height: 0.2;
+}
+
+a {
+    color: white;
+}

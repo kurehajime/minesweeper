@@ -5,6 +5,7 @@ import AssistantElement from "./AssistantElement"
 import BarElement from "./BarElement"
 import FieldElement from "./FieldElement"
 import { useTimer } from 'use-timer'
+import CreditElement from "./CreditElement"
 
 export default function GameElement() {
     const [field, setField] = useState<Field>(Field.GetRandomField(10, 10))
@@ -59,6 +60,7 @@ export default function GameElement() {
                 }}
                 cellSize={cellSize}
             />
+            <CreditElement />
             <AssistantElement
                 show={showAssistant}
                 setLevel={(level: number) => {
