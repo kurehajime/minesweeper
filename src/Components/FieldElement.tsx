@@ -16,7 +16,7 @@ export default function FieldElement(props: Props) {
     const mouseClick = (e: React.PointerEvent<SVGSVGElement>) => {
         const x = e.nativeEvent.offsetX
         const y = e.nativeEvent.offsetY
-        const isTouch = e.nativeEvent.pointerType === "touch"
+        const isTouch = e.pointerType === "touch"
         if (isTouch) {
             clicked(x, y, "menu")
         } else {
