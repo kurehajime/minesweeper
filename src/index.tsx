@@ -8,5 +8,7 @@ const root = ReactDOM.createRoot(
 )
 
 root.render(<div className='container'>
-    <GameElement />
+    <div className='outbox'>
+        <GameElement />
+    </div>
 </div>)

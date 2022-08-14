@@ -1,1 +1,1 @@
-export type BUTTON_TYPE = 'open' | 'flag'
+export type BUTTON_TYPE = 'open' | 'flag' | 'menu'

@@ -7,6 +7,8 @@ type Props = {
     field: Field
     clicked: (index: number, button_type: BUTTON_TYPE) => void
     cellSize: number
+    index: number
+    selected: boolean
 }
 export default function FieldElement(props: Props) {
     const cellSize = props.cellSize
@@ -14,7 +16,12 @@ export default function FieldElement(props: Props) {
     const mouseClick = (e: React.PointerEvent<SVGSVGElement>) => {
         const x = e.nativeEvent.offsetX
         const y = e.nativeEvent.offsetY
-        clicked(x, y, e.button === 0 ? "open" : "flag")
+        const isTouch = e.nativeEvent.pointerType === "touch"
+        if (isTouch) {
+            clicked(x, y, "menu")
+        } else {
+            clicked(x, y, e.button === 0 ? "open" : "flag")
+        }
         e.preventDefault()
     }
 
@@ -41,6 +48,7 @@ export default function FieldElement(props: Props) {
                 x={x}
                 y={y}
                 cellSize={cellSize}
+                selected={props.selected && props.index === index}
             />
         })
         }

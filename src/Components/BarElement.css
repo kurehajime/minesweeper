@@ -9,13 +9,14 @@
 
 .bar {
     background-color: lightgray;
-    width: 100%;
+    width: 510px;
     display: flex;
     border-style: ridge;
     border-width: 5px;
 }
 
 .title_bar {
+    width: 500px;
     border-style: ridge;
     border-width: 5px;
     background-color: blue;

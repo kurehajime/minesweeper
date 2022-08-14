@@ -134,7 +134,7 @@ export class Field {
         }
         return Field.xyToIndex(x, y, size);
     }
-    private static indexToXy(index: number, size: number): [number, number] {
+    public static indexToXy(index: number, size: number): [number, number] {
         return [index % size, Math.floor(index / size)];
     }
 
