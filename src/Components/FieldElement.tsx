@@ -52,5 +52,6 @@ export default function FieldElement(props: Props) {
             />
         })
         }
+        <rect x={0} y={0} width={FieldSize} height={FieldSize} opacity={0} ></rect>
     </svg>)
 }
