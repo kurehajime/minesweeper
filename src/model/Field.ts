@@ -1,3 +1,4 @@
+import { Random } from "./Random"
 import { Cell } from "./State"
 
 export class Field {
@@ -74,7 +75,7 @@ export class Field {
     }
 
     // ランダムなマップを取得
-    public static GetRandomField(size: number, bomb: number): Field {
+    public static GetRandomField(size: number, bomb: number, random = new Random()): Field {
         const len = size * size;
         const opens = Array(len).fill(false);
         const flags = Array(len).fill(false);
@@ -83,7 +84,7 @@ export class Field {
             bombs[i] = true;
         }
         for (let i = len - 1; i >= 0; i--) {
-            const r = Math.floor(Math.random() * (i + 1))
+            const r = Math.floor(random.random() * (i + 1))
             const tmp = bombs[i]
             bombs[i] = bombs[r]
             bombs[r] = tmp
