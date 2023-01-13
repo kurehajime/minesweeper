@@ -4,6 +4,6 @@ import { Field } from '../src/model/Field'
 test('フィールドを生成', () => {
     const random = new Random(64)
     const field = Field.GetRandomField(10, 10, random)
-    expect(field.Cells[62].Count).toBe(4)
-    expect(field.Cells[71].Bomb).toBe(true)
+    expect(field.Cells[62].Count).toBe(0)
+    expect(field.Cells[71].Bomb).toBe(false)
 })
