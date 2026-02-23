@@ -18,6 +18,7 @@
         "start": "vite",
         "build": "tsc --noEmit && vite build",
         "serve": "vite preview",
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts,.tsx",
         "test": "vitest run",
         "uplib": "npx npm-check-updates -u && npm i"
     },
