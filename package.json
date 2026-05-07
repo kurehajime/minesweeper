@@ -34,7 +34,7 @@
         "eslint": "^9.39.1",
         "eslint-plugin-react": "^7.37.5",
         "vite": "^8.0.3",
-        "vite-plugin-singlefile": "^2.3.0",
+        "vite-plugin-singlefile": "^2.3.3",
         "vitest": "^4.0.18"
     }
 }
