@@ -18,21 +18,16 @@
         "start": "vite",
         "build": "tsc --noEmit && vite build",
         "serve": "vite preview",
-        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts,.tsx",
+        "lint": "eslint src",
         "test": "vitest run",
         "uplib": "npx npm-check-updates -u && npm i"
     },
-    "eslintConfig": {
-        "extends": [
-            "react-app"
-        ]
-    },
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "@typescript-eslint/eslint-plugin": "^8.59.2",
         "@typescript-eslint/parser": "^8.56.0",
         "@vitejs/plugin-react": "^6.0.1",
         "eslint": "^10.3.0",
-        "eslint-plugin-react": "^7.37.5",
         "vite": "^8.0.11",
         "vite-plugin-singlefile": "^2.3.3",
         "vitest": "^4.1.5"
